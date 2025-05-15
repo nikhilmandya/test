@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <section class="max-w-4xl mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ 'Edit Product' if product_to_edit else 'Add New Product' }}</h2>
+        <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md mb-8">
+            {{ form.hidden_tag() }}
+            {% if product_to_edit %}
+                <input type="hidden" name="product_id" value="{{ product_to_edit.id }}">
+            {% endif %}
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ form.name.label }}</label>
+                {{ form.name(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500", required="true") }}
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">{{ form.description.label }}</label>
+                {{ form.description(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500", rows="3") }}
+            </div>
+            <div class="mb-4">
+                <label for="category_id" class="block text-gray-700 text-sm font-bold mb-2">{{ form.category_id.label }}</label>
+                {{ form.category_id(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            </div>
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">{{ form.image.label }}</label>
+                {{ form.image(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% if product_to_edit and product_to_edit.image_filename %}
+                    <p class="text-gray-600 text-sm mt-2">Current image: <a href="{{ product_to_edit.image_filename }}" target="_blank">View</a></p>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label for="price" class="block text-gray-700 text-sm font-bold mb-2">{{ form.price.label }}</label>
+                {{ form.price(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500", step="0.01", required="true") }}
+            </div>
+            <div class="mb-4">
+                <label for="discounted_price" class="block text-gray-700 text-sm font-bold mb-2">{{ form.discounted_price.label }}</label>
+                {{ form.discounted_price(class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500", step="0.01") }}
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">{{ 'Update Product' if product_to_edit else 'Add Product' }}</button>
+            {% if product_to_edit %}
+                <a href="{{ url_for('admin_products') }}" class="ml-4 text-gray-600 hover:text-gray-900">Cancel</a>
+            {% endif %}
+        </form>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Existing Products</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for product in products %}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ product.name }}</h4>
+                        <p class="text-gray-600 text-sm mb-2">Category: {{ product.category.name }}</p>
+                        <p class="text-gray-600 text-sm mb-2">Price: ${{ '%.2f'|format(product.price) }}{% if product.discounted_price %} <span class="line-through text-red-500 ml-2">${{ '%.2f'|format(product.discounted_price) }}</span>{% endif %}</p>
+                        <a href="{{ url_for('admin_products', edit_id=product.id) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 mt-2 inline-block">Edit</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <section class="max-w-4xl mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Manage Categories</h2>
+        <form method="POST" class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Category Name</label>
+                <input type="text" id="name" name="name" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <textarea id="description" name="description" rows="3" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Add Category</button>
+        </form>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Existing Categories</h3>
+        <ul class="list-disc list-inside text-gray-600">
+            {% for category in categories %}
+                <li>{{ category.name }} - {{ category.description|truncate(50, true) }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}

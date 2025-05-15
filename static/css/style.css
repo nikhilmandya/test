@@ -1,0 +1,24 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+header, footer {
+    background-color: #2563eb; /* Kept for footer, navbar now white */
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Style for search input */
+input[type="text"] {
+    width: 200px;
+    transition: width 0.3s ease;
+}
+
+input[type="text"]:focus {
+    width: 250px;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boyle Lifesciences</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gray-50 font-inter text-gray-900 antialiased">
+    <header class="bg-white border-b shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-3xl font-bold text-gray-800">Boyle</h1>
+                <span class="text-lg text-gray-600">Lifesciences</span>
+            </div>
+            <nav class="flex items-center space-x-6">
+                <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-gray-900">Home</a>
+                <a href="{{ url_for('products') }}" class="text-gray-700 hover:text-gray-900">Shop Now</a>
+                <a href="{{ url_for('about') }}" class="text-gray-700 hover:text-gray-900">About us</a>
+                <a href="{{ url_for('contact') }}" class="text-gray-700 hover:text-gray-900">Contact us</a>
+                {% if session.user_id %}
+                    <a href="{{ url_for('admin_products') }}" class="text-gray-700 hover:text-gray-900">Admin Products</a>
+                    <a href="{{ url_for('admin_categories') }}" class="text-gray-700 hover:text-gray-900">Admin Categories</a>
+                    <a href="{{ url_for('logout') }}" class="text-gray-700 hover:text-gray-900">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="text-gray-700 hover:text-gray-900">Login / Register</a>
+                {% endif %}
+            </nav>
+            <div class="flex items-center space-x-4">
+                <form action="{{ url_for('search') }}" method="get" class="relative">
+                    <input type="text" name="q" placeholder="Search..." class="border rounded-lg py-2 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ request.args.get('q', '') }}">
+                    <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </form>
+                <button class="text-gray-700 hover:text-gray-900 focus:outline-none lg:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-12">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="bg-{{ 'green' if category == 'success' else 'red' }}-100 border-{{ 'green' if category == 'success' else 'red' }}-400 text-{{ 'green' if category == 'success' else 'red' }}-700 px-4 py-3 rounded-lg mb-6 shadow-sm">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">© 2025 Boyle Lifesciences. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
